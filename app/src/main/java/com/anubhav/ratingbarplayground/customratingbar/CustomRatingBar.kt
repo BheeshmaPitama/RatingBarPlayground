@@ -18,6 +18,10 @@ class CustomRatingBar @JvmOverloads constructor(
     private var selectedDrawable: Drawable
     private var unselectedDrawable: Drawable
     private var numberOfItems: Int = 0
+    private var itemSpacing: Int = 0
+
+    private var onRatingChangedListener: OnRatingChangedListener? = null
+
 
     init {
         orientation = HORIZONTAL
@@ -32,6 +36,7 @@ class CustomRatingBar @JvmOverloads constructor(
                 selectedDrawable = getDrawable(R.styleable.CustomRatingBar_selectedDrawable)!!
                 unselectedDrawable = getDrawable(R.styleable.CustomRatingBar_unselectedDrawable)!!
                 numberOfItems = getInt(R.styleable.CustomRatingBar_numberOfItems, 5)
+                itemSpacing = getDimensionPixelSize(R.styleable.CustomRatingBar_ratingItemSpacing, 0) // Retrieve spacing attribute
             } finally {
                 recycle()
             }
@@ -54,12 +59,16 @@ class CustomRatingBar @JvmOverloads constructor(
         layoutParams = LayoutParams(
             LayoutParams.WRAP_CONTENT,
             LayoutParams.WRAP_CONTENT
-        )
+        ).apply {
+            marginEnd = itemSpacing
+        }
     }
 
     private fun onRatingItemClick(view: View) {
         val position = view.tag as Int
-        setRating(position + 1)
+        val rating = position + 1
+        setRating(rating)
+        onRatingChangedListener?.onRatingChanged(rating)
     }
 
     fun setRating(rating: Int) {
@@ -68,5 +77,14 @@ class CustomRatingBar @JvmOverloads constructor(
             (child as ImageView).setImageDrawable(drawable)
         }
     }
+
+    fun setOnRatingChangedListener(listener: OnRatingChangedListener?) {
+        onRatingChangedListener = listener
+    }
+
+    interface OnRatingChangedListener {
+        fun onRatingChanged(rating: Int)
+    }
+
 }
 

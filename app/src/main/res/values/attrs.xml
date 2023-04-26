@@ -4,5 +4,6 @@
         <attr name="selectedDrawable" format="reference" />
         <attr name="unselectedDrawable" format="reference" />
         <attr name="numberOfItems" format="integer" />
+        <attr name="ratingItemSpacing" format="dimension"/>
     </declare-styleable>
 </resources>
