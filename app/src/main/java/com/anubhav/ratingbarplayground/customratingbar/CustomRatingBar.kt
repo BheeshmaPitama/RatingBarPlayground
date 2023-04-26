@@ -1,10 +1,12 @@
 package com.anubhav.ratingbarplayground.customratingbar
 
+import android.animation.ObjectAnimator
 import android.view.View
 import com.anubhav.ratingbarplayground.R
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.core.view.children
@@ -77,7 +79,14 @@ class CustomRatingBar @JvmOverloads constructor(
     fun setRating(rating: Int) {
         for ((index, child) in children.withIndex()) {
             val drawable = if (index < rating) selectedDrawable else unselectedDrawable
-            (child as ImageView).setImageDrawable(drawable)
+            val imageView = child as ImageView
+            if (imageView.drawable != drawable) {
+                val animator = ObjectAnimator.ofFloat(imageView, "alpha",  0f, 1f)
+                animator.interpolator = AccelerateDecelerateInterpolator()
+                animator.duration = 300
+                animator.start()
+                imageView.setImageDrawable(drawable)
+            }
         }
     }
 
