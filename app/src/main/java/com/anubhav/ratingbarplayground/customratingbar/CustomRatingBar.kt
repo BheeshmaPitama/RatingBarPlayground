@@ -19,9 +19,10 @@ class CustomRatingBar @JvmOverloads constructor(
     private var unselectedDrawable: Drawable
     private var numberOfItems: Int = 0
     private var itemSpacing: Int = 0
+    private var itemWidth: Int = 0
+    private var itemHeight: Int = 0
 
     private var onRatingChangedListener: OnRatingChangedListener? = null
-
 
     init {
         orientation = HORIZONTAL
@@ -36,7 +37,9 @@ class CustomRatingBar @JvmOverloads constructor(
                 selectedDrawable = getDrawable(R.styleable.CustomRatingBar_selectedDrawable)!!
                 unselectedDrawable = getDrawable(R.styleable.CustomRatingBar_unselectedDrawable)!!
                 numberOfItems = getInt(R.styleable.CustomRatingBar_numberOfItems, 5)
-                itemSpacing = getDimensionPixelSize(R.styleable.CustomRatingBar_ratingItemSpacing, 0) // Retrieve spacing attribute
+                itemSpacing = getDimensionPixelSize(R.styleable.CustomRatingBar_ratingItemSpacing, 0)
+                itemWidth = getDimensionPixelSize(R.styleable.CustomRatingBar_ratingItemWidth, LayoutParams.WRAP_CONTENT)
+                itemHeight = getDimensionPixelSize(R.styleable.CustomRatingBar_ratingItemHeight, LayoutParams.WRAP_CONTENT)
             } finally {
                 recycle()
             }
@@ -57,8 +60,8 @@ class CustomRatingBar @JvmOverloads constructor(
 
     private fun createRatingItemImageView() = ImageView(context).apply {
         layoutParams = LayoutParams(
-            LayoutParams.WRAP_CONTENT,
-            LayoutParams.WRAP_CONTENT
+            itemWidth,
+            itemHeight
         ).apply {
             marginEnd = itemSpacing
         }
